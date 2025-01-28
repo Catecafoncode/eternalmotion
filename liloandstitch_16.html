@@ -1,0 +1,446 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title> LILO AND STITCH </title>
+
+<!-- import external .js scripts here -->
+
+<!-- <script type="text/javascript" src="#" ></script> -->
+<!-- modify CSS properties here -->
+
+<style type="text/css">
+body,td,th {
+font-family: Monaco, "Courier New", "monospace";
+font-size: 14px;
+color: rgba(255,255,255,1);
+}
+
+body {
+background-color: rgba(0,0,0,1);
+}
+
+#container {
+position: relative;
+text-align: left;
+width: 95%;
+height: 800px;
+}
+
+#fmxCanvas {
+position: relative;
+background-color:rgba(255,255,255,1);
+border: rgba(255,255,255,1) thin dashed;
+margin: 10px;
+cursor: crosshair;
+display: inline-block;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="container">
+<!-- START HTML CODE HERE -->
+
+<canvas id="fmxCanvas" width="800" height="600"></canvas>
+
+<div id="display"></div>
+	
+<img src= "liloimg/background.png" 		id="bkgd" />
+<img src= "liloimg/base.png" 			id="base"/>
+<img src= "liloimg/leaves.png" 			id="leaves" />	
+<img src= "liloimg/leftear.png" 		id="lear" />	
+<img src= "liloimg/rightear.png" 		id="rear"/>
+<img src= "liloimg/stitcharm.png" 		id="sarm"/>	
+<img src= "liloimg/lilodress.png" 		id="dress" />
+<img src= "liloimg/liloarm.png" 		id="larm"/>
+<img src= "liloimg/lilohairbottom.png" 	id="hairb" />
+<img src= "liloimg/lilohairtop.png" 	id="hairt" />
+
+<br><br>
+
+<audio controls loop id="audio1">
+	<source src= 'liloandstitchsong.mp3' type="audio/mp3" />
+</audio>
+<!-- FINISH HTML CODE HERE -->
+</div>
+
+<script>
+
+///////////////////////////////////////////////////////////////////////
+// DECLARE requestAnimFrame
+
+var rAF = window.requestAnimFrame ||
+window.mozRequestAnimFrame ||
+window.webkitRequestAnimFrame ||
+window.msRequestAnimFrame;
+
+var fps = 30;
+
+window.requestAnimFrame = (
+
+function(callback) {
+
+return rAF ||
+
+function(callback) {
+window.setTimeout(callback, 1000 / fps);
+};
+
+})();
+
+///////////////////////////////////////////////////////////////////////
+// DEFINE GLOBAL VARIABLES HERE
+
+var canvas;
+var ctx;
+canvas = document.getElementById("fmxCanvas");
+ctx = canvas.getContext("2d");
+
+var canvas1;
+var ctx1;
+canvas1 = document.createElement("canvas");
+ctx1 = canvas1.getContext("2d");
+
+canvas1.width = canvas.width;
+canvas1.height = canvas.height;
+
+var canvas2;
+var ctx2;
+canvas2 = document.createElement("canvas");
+ctx2 = canvas2.getContext("2d");
+
+canvas2.width = canvas.width;
+canvas2.height = canvas.height;
+
+var display;
+display = document.getElementById('display');
+
+var counter;
+
+///////////////////////////////////////////////////////////////////////
+// DEFINE YOUR GLOBAL VARIABLES HERE
+
+var bkgd = new Image();	
+	bkgd = document.getElementById("bkgd");
+
+var base = new Image();	
+	base = document.getElementById("base");
+
+var leaves = new Image();	
+	leaves = document.getElementById("leaves");
+
+var lear = new Image();	
+	lear = document.getElementById("lear");
+	
+var rear = new Image();	
+	rear = document.getElementById("rear");
+	
+var sarm = new Image();	
+	sarm = document.getElementById("sarm");
+	
+var dress = new Image();	
+	dress = document.getElementById("dress");
+	
+var larm = new Image();	
+	larm = document.getElementById("larm");
+	
+var hairb = new Image();	
+	hairb = document.getElementById("hairb");
+	
+var hairt = new Image();	
+	hairt = document.getElementById("hairt");	
+	
+///////////////////////////////////////////////////////////////////////
+// CALL THE EVENT LISTENERS
+
+window.addEventListener("load", setup, false);
+//////////////////////////////////////////////////////////////////////
+// ADD EVENT LISTENERS
+
+canvas.addEventListener("mousemove", mousePos, false);
+
+//////////////////////////////////////////////////////////////////////
+// MOUSE COORDINATES
+
+var stage, mouseX, mouseY;
+
+function mousePos(event) {
+stage = canvas.getBoundingClientRect();
+mouseX = event.clientX - stage.left;
+mouseY = event.clientY - stage.top;
+}
+
+/////////////////////////////////////////////////////////////////////
+// INITIALIZE THE STARTING FUNCTION
+
+function setup() {
+
+/////////////////////////////////////////////////////////////////////
+// DECLARE STARTING VALUES OF GLOBAL VARIABLES
+
+counter = 0;
+mouseX = canvas.width/2;
+mouseY = canvas.height/2;
+
+/////////////////////////////////////////////////////////////////////
+// CALL SUBSEQUENT FUNCTIONS, as many as you need
+
+clear(); // COVER TRANSPARENT CANVAS OR CLEAR CANVAS
+
+draw(); // THIS IS WHERE EVERYTHING HAPPENS
+
+}
+
+////////////////////////////////////////////////////////////////////
+// CLEAR THE CANVAS FOR ANIMATION
+// USE THIS AREA TO MODIFY BKGD
+
+function clear() {
+
+ctx.clearRect(0,0,canvas.width, canvas.height);
+ctx1.clearRect(0,0,canvas.width, canvas.height);
+ctx2.clearRect(0,0,canvas.width, canvas.height);
+
+// clear additional ctxs here if you have more than canvas1
+
+}
+
+////////////////////////////////////////////////////////////////////
+// THIS IS WHERE EVERYTHING HAPPENS
+
+function draw() {
+
+counter += 0.1; // EASIER FOR SINE COSINE FUNCTIONS
+
+if (counter > Math.PI*200) { counter = 0; } // RESET COUNTER
+
+clear(); // USE THIS TO REFRESH THE FRAME AND CLEAR CANVAS
+
+////////////////////////////////////////////////////////////////////
+// >>>START HERE>>>START HERE>>>START HERE>>>START HERE>>>START HERE
+
+/// BACKGROUND
+	
+ctx.drawImage(bkgd,0,0);
+
+// LEFT EAR 
+
+var sine, cosine, rad;
+	
+sine = Math.sin(counter);
+cosine = Math.cos(counter);
+rad = 40
+
+var learamp = 620 + rad + sine * 40	
+
+ctx.save();
+	
+ctx.translate(456,363);
+
+ctx.rotate(learamp/100);
+
+ctx.drawImage(lear,-20,-80);
+
+ctx.restore();	
+
+// LILO HAIR BOTTOM 0-24
+	
+var sine, cosine, rad;
+	
+sine = Math.sin(counter);
+cosine = Math.cos(counter);
+rad = 12
+
+var hairbamp = 0 + rad + sine * 12	
+
+ctx.save();
+	
+ctx.translate(251,407);
+
+ctx.rotate(hairbamp/100);
+
+ctx.drawImage(hairb,-45,-9);
+
+ctx.restore();
+
+
+/// BASE
+
+ctx.drawImage(base,180,290);
+	
+// STITCH LEAVES
+	
+var sine, cosine, rad;
+	
+sine = Math.sin(counter);
+cosine = Math.cos(counter);
+rad = 40
+
+var leavesamp = 580 + rad + sine * 40
+	
+ctx.save();
+	
+ctx.translate(458,481);
+
+ctx.rotate(leavesamp/100);
+
+ctx.drawImage(leaves,-1,-1);
+	
+ctx.restore();
+
+// STITCH ARM 
+
+var sine, cosine, rad;
+	
+sine = Math.sin(counter);
+cosine = Math.cos(counter);
+rad = 40
+
+var sarmamp = 540 + rad + cosine * 40
+		
+ctx.save();
+	
+ctx.translate(459,417);
+
+ctx.rotate(sarmamp/100);
+
+
+ctx.drawImage(sarm,-78,-42);
+
+ctx.restore();	
+
+
+// STITCH RIGHT EAR
+	
+var sine, cosine, rad;
+	
+sine = Math.sin(counter);
+cosine = Math.cos(counter);
+rad = 20
+
+var rearamp = 620 + rad + sine * 20	
+
+ctx.save();
+	
+ctx.translate(533,404);
+
+ctx.rotate(rearamp/100);
+
+ctx.drawImage(rear,-3,-105);
+
+ctx.restore();
+
+// LILO DRESS
+
+var sine, cosine, rad;
+	
+sine = Math.sin(counter);
+cosine = Math.cos(counter);
+rad = 16
+
+var dressamp = 600 + rad + cosine * 16	
+
+ctx.save();
+	
+ctx.translate(308,453);
+
+ctx.rotate(dressamp/100);
+
+ctx.drawImage(dress,-4,-15);
+
+ctx.restore();
+
+// LILO ARM 0-80
+
+var sine, cosine, rad;
+	
+sine = Math.sin(counter);
+cosine = Math.cos(counter);
+rad = 50
+
+var larmamp = 0 + rad + sine * 60	
+
+ctx.save();
+	
+ctx.translate(265,387);
+
+ctx.rotate(larmamp/100);
+
+ctx.drawImage(larm,-85,-9);
+
+ctx.restore();
+	
+// LILO HAIR TOP 612-630
+
+var sine, cosine, rad;
+	
+sine = Math.sin(counter);
+cosine = Math.cos(counter);
+rad = 18
+
+var hairtamp = 610 + rad + sine * 7	
+
+ctx.save();
+	
+ctx.translate(304,305);
+
+ctx.scale(1.1,1.1);
+
+ctx.rotate(hairtamp/100);
+
+ctx.drawImage(hairt,-2,-2);
+
+ctx.restore();
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+// <<<END HERE<<<END HERE<<<END HERE<<<END HERE<<<END HERE<<<END HERE
+///////////////////////////////////////////////////////////////////
+
+// CREDITS
+
+ctx.save();
+var credits = "Caterina Cafoncelli, Lilo & Stitch, FMX 310, FA2022";
+ctx.font = 'bold 12px Helvetica';
+ctx.fillStyle = "rgba(0,0,0,1)"; // change the color here
+ctx.shadowColor = "rgba(255,255,255,1)"; // change shadow color here
+ctx.shadowBlur = 12;
+ctx.shadowOffsetX = 2;
+ctx.shadowOffsetY = 2;
+ctx.fillText(credits, 10, canvas.height - 10); // CHANGE THE LOCATION HERE
+ctx.restore();
+
+//////////////////////////////////////////////////////////////////
+// HTML DISPLAY FIELD FOR TESTING PURPOSES
+
+display.innerHTML = Math.round(mouseX) + " || " + Math.round(mouseY) + " || counter = " + Math.round(counter);
+
+/////////////////////////////////////////////////////////////////
+// LAST LINE CREATES THE ANIMATION
+
+requestAnimFrame(draw); // CALLS draw() every nth of a second
+
+}
+
+</script>
+
+</body>
+</html>
